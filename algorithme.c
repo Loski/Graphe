@@ -21,6 +21,22 @@ int ** initialisation_dijkstra(int sommet, int nb_sommet){
 }
 int choixAlgo(matrice_adjacente *m){
 }
+void afficheGraphe(matrice_adjacente m)
+{
+    int i,j;
+    printf ("digraph mon_graphe {");
+    for (i=0;i<m.nombre_sommet;i++)
+    {
+        for (j=0;j<m.nombre_sommet;j++)
+        {
+            if(m.matrice[i][j][PARCOURU]==1)
+            {
+                printf("%d->%d[LABEL=%d]",i,j,m.matrice[i][j][POIDS]);
+            }
+        }
+    }
+    printf("}");
+}
 void dijkstra(matrice_adjacente * m, int sommet){
     int **distance = initialisation_dijkstra(sommet, m->nombre_sommet), i, j;
     for(i = 0; i < m->nombre_sommet; i++){
