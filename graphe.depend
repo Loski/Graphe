@@ -1,36 +1,34 @@
 # depslib dependency file v1.0
-1448928930 source:c:\users\maxime\documents\graphe\main.c
+1452442319 source:c:\users\maxime\documents\github\graphe\algorithme.c
+	<stdbool.h>
+	<stdlib.h>
+	<stdio.h>
+	<math.h>
+	<limits.h>
+	"algorithme.h"
+
+1452437343 c:\users\maxime\documents\github\graphe\algorithme.h
+	<stdbool.h>
+	"graphe.h"
+
+1452438650 c:\users\maxime\documents\github\graphe\graphe.h
+
+1452438659 source:c:\users\maxime\documents\github\graphe\lecture.c
+	<stdio.h>
+	<stdlib.h>
+	<stdbool.h>
+	"graphe.h"
+
+1452438613 source:c:\users\maxime\documents\github\graphe\main.c
 	<stdio.h>
 	<stdlib.h>
 	"graphe.h"
 	"lecture.h"
 	"algorithme.h"
 
-1448285360 c:\users\maxime\documents\graphe\lecture.c
-	<stdio.h>
-	<stdlib.h>
-	"graphe.h"
+1450099297 c:\users\maxime\documents\github\graphe\lecture.h
 
-1448886496 c:\users\maxime\documents\graphe\graphe.h
-
-1448972344 source:c:\users\maxime\documents\graphe\lecture.c
-	<stdio.h>
-	<stdlib.h>
-	"graphe.h"
-
-1448374295 c:\users\maxime\documents\graphe\lecture.h
-
-1448972436 c:\users\maxime\documents\graphe\algorithme.h
+1452437343 source:c:\users\maxime\documents\github\graphe\algorithme.h
 	<stdbool.h>
 	"graphe.h"
-
-1448886455 source:c:\users\maxime\documents\graphe\algorithme.h
-	"graphe.h"
-
-1448972398 source:c:\users\maxime\documents\graphe\algorithme.c
-	<stdbool.h>
-	<stdlib.h>
-	<stdio.h>
-	<math.h>
-	"algorithme.h"
 

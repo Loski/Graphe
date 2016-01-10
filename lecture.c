@@ -1,16 +1,27 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include "graphe.h"
 
 int chargementGraphe(graphe_chargement *g)
 {
     FILE * fichier = NULL;
     int i;
-    fichier = fopen("test.txt","rt");
-    if(fichier == NULL)
+    bool ouvert = false;
+    while(!ouvert)
     {
-        printf("\nImpossible d'ouvrir la sauvegarde\n");
-        exit(EXIT_FAILURE);
+        char nom_fichier[100];
+        printf("Entrez le nom du fichier contenant votre graphe :");
+        scanf("%s", nom_fichier);
+        fichier = fopen(nom_fichier,"rt");
+        if(fichier == NULL)
+        {
+            printf("\nImpossible d'ouvrir la sauvegarde\n Retentez ! \n");
+        }
+        else{
+            printf("\nChargement effectuer ! \n");
+            ouvert = true;
+        }
     }
     fscanf(fichier, "%d %d", &(g->nombre_sommet), &(g->nombre_arc));
     g->arc_graphe = malloc(sizeof(arc) * g->nombre_arc);
@@ -44,14 +55,11 @@ void transformGraphe(graphe_chargement g, matrice_adjacente *m)
         m->matrice[g.arc_graphe[i].head-1][g.arc_graphe[i].queue-1][CHEMIN] = 1;
         m->matrice[g.arc_graphe[i].head-1][g.arc_graphe[i].queue-1][POIDS] =  g.arc_graphe[i].poids;
     }
-
-    afficherGraphe(*m, CHEMIN);
-    afficherGraphe(*m, POIDS);
 }
 
 
 // Type _> Soit la constante poids, soit chemin
-void afficherGraphe(matrice_adjacente m, int type)
+void afficheGrapheMatrice(matrice_adjacente m, int type)
 {
     int i,j;
     printf("\n");

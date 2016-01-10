@@ -28,7 +28,7 @@ typedef struct matrice_adjacente
     int nombre_sommet;
 } matrice_adjacente;
 
-void afficherGraphe(matrice_adjacente m, int type);
+void afficheGrapheMatrice(matrice_adjacente m, int type);
 
 
 #endif // GRAPHE_H_INCLUDED

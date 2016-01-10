@@ -10,8 +10,10 @@ int main(int argc, char *argv[])
     chargementGraphe(&g);
     matrice_adjacente m;
     transformGraphe(g, &m);
-    dijkstra(&m, 2);
-    belman_ford(&m, 2);
+    //afficherGraphe(m,0);
+    afficheGrapheMatrice(m, POIDS);
+    int sommet = choixSommet(&m);
+    plusCourtChemin(&m, sommet);
     return 0;
 }
 
