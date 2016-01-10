@@ -26,6 +26,6 @@ void mettreAJourMatriceCalculTopo(int ** m, int sommet, int degre);
 bool rotation(int **matrice_calcul_topo, int nombre_sommet, int * ordre_topologique, int *taille_topo, int *taille_topo_max);
 void trouverSommet(int ** m, int degre, int * ordre_topo, int min, int max);
 void bellman(matrice_adjacente * m, int * ordre_topologique, int sommet);
-int choixSommet(&m);
+int choixSommet(matrice_adjacente *m);
 
 #endif // ALGO_H_INCLUDED
