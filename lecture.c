@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include "graphe.h"
 
+
 int chargementGraphe(graphe_chargement *g)
 {
     FILE * fichier = NULL;
@@ -56,7 +57,6 @@ void transformGraphe(graphe_chargement g, matrice_adjacente *m)
         m->matrice[g.arc_graphe[i].head-1][g.arc_graphe[i].queue-1][POIDS] =  g.arc_graphe[i].poids;
     }
 }
-
 
 // Type _> Soit la constante poids, soit chemin
 void afficheGrapheMatrice(matrice_adjacente m, int type)
