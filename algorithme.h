@@ -4,9 +4,9 @@
 #include "graphe.h"
 
 
-#define PARCOURU 2
+#define PARCOURU 0
 #define POIDS 1
-#define ANTECEDENT 0
+#define ANTECEDENT 2
 #define NEW_POIDS 3
 #define ORDRE 0
 #define DEGRE_ENTRANT 1

@@ -1,1 +1,1 @@
-digraph Graphe {3->1[LABEL=1];0->2[LABEL=-5];2->3[LABEL=7];}
+digraph Graphe {3->1[label=1];0->2[label=-5];2->3[label=7];}

@@ -11,8 +11,8 @@ int main(int argc, char *argv[])
     chargementGraphe(&g, nom);
     matrice_adjacente m;
     transformGraphe(g, &m);
-    afficheGraphe(m , nom);
     int sommet = choixSommet(&m);
+    afficheGraphe(&m , nom);
     plusCourtChemin(&m, sommet, nom);
     return 0;
 }

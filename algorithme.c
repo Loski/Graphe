@@ -71,7 +71,7 @@ bool presencePoidsNegatif(matrice_adjacente * m)
     return false;
 }
 
-void afficheGraphe(matrice_adjacente m, char * nom)
+void afficheGraphe(matrice_adjacente * m, char * nom)
 {
     FILE* fichier = NULL;
     char * ptr;
@@ -84,13 +84,13 @@ void afficheGraphe(matrice_adjacente m, char * nom)
         exit(EXIT_FAILURE);
     }
     fprintf (fichier, "digraph Graphe {");
-    for (i=0; i<m.nombre_sommet; i++)
+    for (i=0; i<m->nombre_sommet; i++)
     {
-        for (j=0; j<m.nombre_sommet; j++)
+        for (j=0; j<m->nombre_sommet; j++)
         {
-            if(m.matrice[i][j][PARCOURU]==1)
+            if(m->matrice[i][j][PARCOURU]==1)
             {
-                fprintf(fichier, "%d->%d[LABEL=%d];",i,j,m.matrice[i][j][POIDS]);
+                fprintf(fichier, "%d->%d[label=%d];",i,j,m->matrice[i][j][POIDS]);
             }
         }
     }
@@ -112,7 +112,7 @@ void afficheGrapheDotFinal(int nombre_sommet, int ** distance, matrice_adjacente
     for (i=0; i<nombre_sommet; i++)
     {
         if(distance[i][ANTECEDENT] != -1)
-            fprintf(fichier, "%d->%d[LABEL=%d];",distance[i][ANTECEDENT],i,m->matrice[distance[i][ANTECEDENT]][i][POIDS]);
+            fprintf(fichier, "%d->%d[label=%d];",distance[i][ANTECEDENT],i,m->matrice[distance[i][ANTECEDENT]][i][POIDS]);
     }
     fprintf(fichier ,"}");
     fclose(fichier);
