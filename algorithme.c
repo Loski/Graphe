@@ -1,7 +1,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <math.h>
+#include <string.h>
 #include <limits.h>
 #include "algorithme.h"
 
@@ -26,7 +26,7 @@ void plusCourtChemin(matrice_adjacente *m, int sommet, char nom[50])
     nombre_operation += 2;
     if(NULL == listeTopo)
     {
-        printf("Présence d'un cycle. Testons Ford Bellman !");
+        printf("Présence d'un cycle. Testons  Bellman-Ford !");
         bellman_ford(m, distance, sommet);
     }
     else
@@ -71,21 +71,30 @@ bool presencePoidsNegatif(matrice_adjacente * m)
     return false;
 }
 
-void afficheGraphe(matrice_adjacente m)
+void afficheGraphe(matrice_adjacente m, char * nom)
 {
+    FILE* fichier = NULL;
+    char * ptr;
     int i,j;
-    printf ("digraph mon_graphe {");
+    if((ptr = strchr(nom , '.'))!= NULL)
+        *ptr = '\0';
+    fichier = fopen(strcat(nom, ".dot"), "w+");
+    if(fichier == NULL){
+        printf("Impossible d'ouvrir le fichier");
+        exit(EXIT_FAILURE);
+    }
+    fprintf (fichier, "digraph Graphe {");
     for (i=0; i<m.nombre_sommet; i++)
     {
         for (j=0; j<m.nombre_sommet; j++)
         {
             if(m.matrice[i][j][PARCOURU]==1)
             {
-                printf("%d->%d[LABEL=%d];",i,j,m.matrice[i][j][POIDS]);
+                fprintf(fichier, "%d->%d[LABEL=%d];",i,j,m.matrice[i][j][POIDS]);
             }
         }
     }
-    printf("}");
+    fprintf(fichier, "}");
 }
 void afficheGrapheDotFinal(int nombre_sommet, int ** distance, matrice_adjacente * m, char nom[50])
 {
@@ -94,10 +103,12 @@ void afficheGrapheDotFinal(int nombre_sommet, int ** distance, matrice_adjacente
     FILE* fichier = NULL;
     if((ptr = strchr(nom , '.'))!= NULL)
         *ptr = '\0';
-    fichier = fopen(strcat(nom, ".dot"), "w+");
-    if(fichier == NULL)
+    fichier = fopen(strcat(nom, "CourtChemin.dot"), "w+");
+    if(fichier == NULL){
+        printf("Impossible d'ouvrir le fichier");
         exit(EXIT_FAILURE);
-    fprintf (fichier, "digraph mon_graphe {");
+    }
+    fprintf (fichier, "digraph Graphe {");
     for (i=0; i<nombre_sommet; i++)
     {
         if(distance[i][ANTECEDENT] != -1)

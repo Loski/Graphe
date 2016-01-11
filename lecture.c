@@ -19,7 +19,7 @@ void chargementGraphe(graphe_chargement *g, char * nom_fichier)
             printf("\nImpossible d'ouvrir la sauvegarde\n Retentez ! \n");
         }
         else{
-            printf("\nChargement effectuer ! \n");
+            printf("\nChargement effectué ! \n");
             ouvert = true;
         }
     }

@@ -1,9 +1,9 @@
 # depslib dependency file v1.0
-1452473575 source:c:\users\maxime\documents\github\graphe\algorithme.c
+1452475078 source:c:\users\maxime\documents\github\graphe\algorithme.c
 	<stdbool.h>
 	<stdlib.h>
 	<stdio.h>
-	<math.h>
+	<string.h>
 	<limits.h>
 	"algorithme.h"
 
@@ -13,13 +13,13 @@
 
 1452438650 c:\users\maxime\documents\github\graphe\graphe.h
 
-1452472904 source:c:\users\maxime\documents\github\graphe\lecture.c
+1452474868 source:c:\users\maxime\documents\github\graphe\lecture.c
 	<stdio.h>
 	<stdlib.h>
 	<stdbool.h>
 	"graphe.h"
 
-1452471206 source:c:\users\maxime\documents\github\graphe\main.c
+1452474846 source:c:\users\maxime\documents\github\graphe\main.c
 	<stdio.h>
 	<stdlib.h>
 	"graphe.h"
