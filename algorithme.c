@@ -12,49 +12,62 @@ void plusCourtChemin(matrice_adjacente *m, int sommet, char nom[50])
     int i,j;
     nombre_operation = 1;
     int **distance = malloc(sizeof(int*) * m->nombre_sommet);
-    for(i = 0; i < m->nombre_sommet; i++){
+    for(i = 0; i < m->nombre_sommet; i++)
+    {
         distance[i] = malloc(sizeof(int) * 3);
     }
-    if(!presencePoidsNegatif(m)){
-            printf("\nOn utilise l'algorithme de Dijkstra !\n");
+    if(!presencePoidsNegatif(m))
+    {
+        printf("\nOn utilise l'algorithme de Dijkstra !\n");
         dijkstra(m, distance, sommet);
         return;
     }
     int * listeTopo = tri_topologique(m);
     nombre_operation += 2;
-    if(NULL == listeTopo){
+    if(NULL == listeTopo)
+    {
         printf("Présence d'un cycle. Testons Ford Bellman !");
         bellman_ford(m, distance, sommet);
     }
-    else{
+    else
+    {
         printf("\nOn utilise l'algorithme de Bellman !\n");
         bellman(m , distance, listeTopo, sommet);
     }
-        afficheGrapheDotFinal(m->nombre_sommet, distance, m, nom);
+    afficheGrapheDotFinal(m->nombre_sommet, distance, m, nom);
     printf("L'execution du programme pour votre graphe a nécessité %d opérations.", nombre_operation);
-
+    for(i = 0; i < m->nombre_sommet; i++)
+    {
+        free(distance[i]);
+    }
+    free(distance);
 }
-int choixSommet(matrice_adjacente * m){
+int choixSommet(matrice_adjacente * m)
+{
     int choixJ;
-    do{
+    do
+    {
         printf("De quel sommet voulez vous regarder?\t0 - %d\n", m->nombre_sommet-1);
         scanf("%d", &choixJ);
         while(getchar()!='\n')
             continue;
-    }while( choixJ < 0 || choixJ>m->nombre_sommet-1);
+    }
+    while( choixJ < 0 || choixJ>m->nombre_sommet-1);
     printf("Vous avez choisis le sommet %d", choixJ);
     return choixJ;
 }
 
-bool presencePoidsNegatif(matrice_adjacente * m){
+bool presencePoidsNegatif(matrice_adjacente * m)
+{
     int i,j;
     nombre_operation+=2;
     for(i = 0; i < m->nombre_sommet ; i++)
-         for(j = 0; j < m->nombre_sommet ; j++){
+        for(j = 0; j < m->nombre_sommet ; j++)
+        {
             nombre_operation+=2;
             if(m->matrice[i][j][POIDS] < 0)
                 return true;
-         }
+        }
     return false;
 }
 
@@ -74,11 +87,12 @@ void afficheGraphe(matrice_adjacente m)
     }
     printf("}");
 }
-void afficheGrapheDotFinal(int nombre_sommet, int ** distance, matrice_adjacente * m, char nom[50]){
+void afficheGrapheDotFinal(int nombre_sommet, int ** distance, matrice_adjacente * m, char nom[50])
+{
     int i;
     char * ptr;
     FILE* fichier = NULL;
-   if((ptr = strchr(nom , '.'))!= NULL)
+    if((ptr = strchr(nom , '.'))!= NULL)
         *ptr = '\0';
     fichier = fopen(strcat(nom, ".dot"), "w+");
     if(fichier == NULL)
@@ -116,7 +130,8 @@ void dijkstra(matrice_adjacente * m,int ** distance, int sommet)
         nombre_operation+= 2;
         for(j = 0; j < m->nombre_sommet; j++) // pour cq sommet j
         {
-            if(!distance[j][PARCOURU] && distance[j][POIDS] > -1 && (distance[j][POIDS] < poids_actu || sommet_actu == -1)){
+            if(!distance[j][PARCOURU] && distance[j][POIDS] > -1 && (distance[j][POIDS] < poids_actu || sommet_actu == -1))
+            {
                 /*Si le sommet j n'a pas été parcouru, que son poids est sup à 0 et que le poids du sommet j est inférieur ou que le sommet actuel
                  est égal à -1, donc aucun sommet marqué. On marque ainsi le sommet non parcouru, ayant le plus petit poids positif */
                 sommet_actu = j;
@@ -222,7 +237,8 @@ void bellman_ford(matrice_adjacente * m, int ** distance, int sommet)
                 }
         }
     }
-    if(verificationBellmanFord(distance, m)){
+    if(verificationBellmanFord(distance, m))
+    {
         printf("Les plus courts chemins à partir de %d ont les valeurs suivantes", sommet);
         for(i = 0; i < m->nombre_sommet; i++)
             if(sommet != i)
@@ -237,7 +253,8 @@ bool verificationBellmanFord(int **distance, matrice_adjacente * m)
     int j, k;
     for(j = 0; j < m->nombre_sommet; j++)
     {
-        for(k = 0; k < m->nombre_sommet; k++){
+        for(k = 0; k < m->nombre_sommet; k++)
+        {
             nombre_operation++;
             if(m->matrice[j][k][CHEMIN] == 1)
             {
@@ -251,23 +268,28 @@ bool verificationBellmanFord(int **distance, matrice_adjacente * m)
     return true;
 }
 
-int * tri_topologique(matrice_adjacente *m){
+int * tri_topologique(matrice_adjacente *m)
+{
     int i, j;
     int **matrice_calcul_topo = malloc(sizeof(int)* m->nombre_sommet), *ordre_topologique = malloc(sizeof(int)* m->nombre_sommet), taille_topo = 0, taille_topo_max = 0;
     nombre_operation++;
-    for(i = 0 ; i < m->nombre_sommet; i++){
+    for(i = 0 ; i < m->nombre_sommet; i++)
+    {
         matrice_calcul_topo[i] = calloc(sizeof(int), m->nombre_sommet +1);
         nombre_operation++;
-        for(j = 0; j < m->nombre_sommet; j++){
+        for(j = 0; j < m->nombre_sommet; j++)
+        {
             matrice_calcul_topo[i][j] = m->matrice[i][j][CHEMIN];
             nombre_operation++;
         }
     }
 
     int compteur = 0;
-    while(compteur != m->nombre_sommet){ // Max d'itération = le nombre de sommet
+    while(compteur != m->nombre_sommet)  // Max d'itération = le nombre de sommet
+    {
         nombre_operation++;
-        if(taille_topo_max == m->nombre_sommet){ //Même nombre de sommets donc on a tous trié.
+        if(taille_topo_max == m->nombre_sommet)  //Même nombre de sommets donc on a tous trié.
+        {
             return ordre_topologique;
         }
         for(i = 0 ; i < m->nombre_sommet; i++)
@@ -290,11 +312,13 @@ int * tri_topologique(matrice_adjacente *m){
 
     return ordre_topologique;
 }
-bool rotation(int ** m, int degre, int *ordre_topologique, int * min, int * max){
+bool rotation(int ** m, int degre, int *ordre_topologique, int * min, int * max)
+{
     int i;
     for(i = 0 ; i < degre; i++)
     {
-        if(m[i][degre] == 0){
+        if(m[i][degre] == 0)
+        {
             nombre_operation+= 2;
             ordre_topologique[*max] = i; // on ajouter le sommet
             (*max)++;
@@ -308,9 +332,11 @@ bool rotation(int ** m, int degre, int *ordre_topologique, int * min, int * max)
     nombre_operation+=2;
     return true;
 }
-void trouverSommet(int ** m, int degre, int * ordre_topo, int min, int max){
+void trouverSommet(int ** m, int degre, int * ordre_topo, int min, int max)
+{
     int i;
-    for(i = min; i < max; i++){
+    for(i = min; i < max; i++)
+    {
         mettreAJourMatriceCalculTopo(m, ordre_topo[i], degre);
         nombre_operation++;
     }
@@ -318,9 +344,11 @@ void trouverSommet(int ** m, int degre, int * ordre_topo, int min, int max){
 
 
 // on supprime les arcs sortants du sommet.
-void mettreAJourMatriceCalculTopo(int ** m, int sommet, int degre){
+void mettreAJourMatriceCalculTopo(int ** m, int sommet, int degre)
+{
     int i;
-    for(i = 0; i < degre; i++){
+    for(i = 0; i < degre; i++)
+    {
         m[sommet][i] = 0;
         nombre_operation++;
     }
@@ -350,7 +378,8 @@ void bellman(matrice_adjacente * m, int ** distance, int * ordre_topologique, in
     nombre_operation++;
     for(i = 0; i < m->nombre_sommet; i++)
     {
-        for(j = 0; j < m->nombre_sommet; j++){
+        for(j = 0; j < m->nombre_sommet; j++)
+        {
             nombre_operation+= 3;
             if(m->matrice[ordre_topologique[i]][j][CHEMIN] == 1 && distance[ordre_topologique[i]][POIDS] != INT_MAX && ordre_topologique[i] != j)  // Si il y a un chemin entre le premier sommet classé et j
             {
