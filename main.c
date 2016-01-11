@@ -6,14 +6,13 @@
 
 int main(int argc, char *argv[])
 {
+    char nom[50];
     graphe_chargement g;
-    chargementGraphe(&g);
+    chargementGraphe(&g, nom);
     matrice_adjacente m;
     transformGraphe(g, &m);
-    //afficherGraphe(m,0);
-    afficheGrapheMatrice(m, POIDS);
     int sommet = choixSommet(&m);
-    plusCourtChemin(&m, sommet);
+    plusCourtChemin(&m, sommet, nom);
     return 0;
 }
 

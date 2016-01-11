@@ -4,14 +4,13 @@
 #include "graphe.h"
 
 
-int chargementGraphe(graphe_chargement *g)
+void chargementGraphe(graphe_chargement *g, char * nom_fichier)
 {
     FILE * fichier = NULL;
     int i;
     bool ouvert = false;
     while(!ouvert)
     {
-        char nom_fichier[100];
         printf("Entrez le nom du fichier contenant votre graphe :");
         scanf("%s", nom_fichier);
         fichier = fopen(nom_fichier,"rt");
@@ -35,7 +34,8 @@ int chargementGraphe(graphe_chargement *g)
     {
         fscanf(fichier, "%d,%d,%d", &(g->arc_graphe[i].head), &(g->arc_graphe[i].queue), &(g->arc_graphe[i].poids));
     }
-    return 1;
+    fclose(fichier);
+    return;
 }
 
 void transformGraphe(graphe_chargement g, matrice_adjacente *m)

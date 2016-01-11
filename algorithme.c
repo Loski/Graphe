@@ -7,25 +7,32 @@
 
 int nombre_operation;
 
-void plusCourtChemin(matrice_adjacente *m, int sommet)
+void plusCourtChemin(matrice_adjacente *m, int sommet, char nom[50])
 {
+    int i,j;
     nombre_operation = 1;
+    int **distance = malloc(sizeof(int*) * m->nombre_sommet);
+    for(i = 0; i < m->nombre_sommet; i++){
+        distance[i] = malloc(sizeof(int) * 3);
+    }
     if(!presencePoidsNegatif(m)){
             printf("\nOn utilise l'algorithme de Dijkstra !\n");
-        dijkstra(m, sommet);
+        dijkstra(m, distance, sommet);
         return;
     }
     int * listeTopo = tri_topologique(m);
     nombre_operation += 2;
     if(NULL == listeTopo){
         printf("Présence d'un cycle. Testons Ford Bellman !");
-        bellman_ford(m, sommet);
+        bellman_ford(m, distance, sommet);
     }
     else{
         printf("\nOn utilise l'algorithme de Bellman !\n");
-        bellman(m , listeTopo, sommet);
+        bellman(m , distance, listeTopo, sommet);
     }
+        afficheGrapheDotFinal(m->nombre_sommet, distance, m, nom);
     printf("L'execution du programme pour votre graphe a nécessité %d opérations.", nombre_operation);
+
 }
 int choixSommet(matrice_adjacente * m){
     int choixJ;
@@ -67,22 +74,29 @@ void afficheGraphe(matrice_adjacente m)
     }
     printf("}");
 }
-void afficheGrapheDotFinal(int nombre_sommet, int ** distance, matrice_adjacente * m){
+void afficheGrapheDotFinal(int nombre_sommet, int ** distance, matrice_adjacente * m, char nom[50]){
     int i;
-    printf ("digraph mon_graphe {");
+    char * ptr;
+    FILE* fichier = NULL;
+   if((ptr = strchr(nom , '.'))!= NULL)
+        *ptr = '\0';
+    fichier = fopen(strcat(nom, ".dot"), "w+");
+    if(fichier == NULL)
+        exit(EXIT_FAILURE);
+    fprintf (fichier, "digraph mon_graphe {");
     for (i=0; i<nombre_sommet; i++)
     {
         if(distance[i][ANTECEDENT] != -1)
-            printf("%d->%d[LABEL=%d];",distance[i][ANTECEDENT],i,m->matrice[distance[i][ANTECEDENT]][i][POIDS]);
+            fprintf(fichier, "%d->%d[LABEL=%d];",distance[i][ANTECEDENT],i,m->matrice[distance[i][ANTECEDENT]][i][POIDS]);
     }
-    printf("}");
+    fprintf(fichier ,"}");
+    fclose(fichier);
 }
 void initialisation_dijkstra(int ** distance, int sommet, int nb_sommet)
 {
     int i;
     for(i = 0; i < nb_sommet; i++)
     {
-        distance[i] = malloc(sizeof(int) * 3);
         distance[i][PARCOURU] = false;
         distance[i][POIDS] = -1;
         distance[i][ANTECEDENT] = -1;
@@ -91,9 +105,9 @@ void initialisation_dijkstra(int ** distance, int sommet, int nb_sommet)
     distance[sommet][POIDS] = 0;// On initialise le sommet de départ à 0.
     nombre_operation++;
 }
-void dijkstra(matrice_adjacente * m, int sommet)
+void dijkstra(matrice_adjacente * m,int ** distance, int sommet)
 {
-    int **distance = malloc(sizeof(int*) * m->nombre_sommet), i, j;
+    int i, j;
     nombre_operation++;
     initialisation_dijkstra(distance, sommet, m->nombre_sommet);
     for(i = 0; i < m->nombre_sommet; i++)  // pour cq sommet i
@@ -130,7 +144,6 @@ void dijkstra(matrice_adjacente * m, int sommet)
     }
     for(i = 0 ; i < m->nombre_sommet; i++)
         afficherCheminPlusCourt(distance, sommet, i);
-    afficheGrapheDotFinal(m->nombre_sommet, distance, m);
 }
 
 
@@ -165,25 +178,25 @@ void afficherCheminPlusCourt(int **etat_final, int sommet_depart, int sommet_fin
     printf("\nde %d au sommet %d : %d.\n", sommet_depart, sommet_final, poids);
 }
 
-int ** initialisation_bellmanFord(int sommet, int nb_sommet)
+void initialisation_bellmanFord(int sommet, int ** distance, int nb_sommet)
 {
-    int **distance = malloc(sizeof(int*) * nb_sommet), i;
+    int i;
     nombre_operation++;
     for(i = 0; i < nb_sommet; i++)
     {
-        distance[i] = malloc(sizeof(int) * 2);
         distance[i][ANTECEDENT] = -1;
         distance[i][POIDS] = INT_MAX;
         nombre_operation += 3;
     }
     distance[sommet][POIDS] = 0;
     nombre_operation++;
-    return distance;
+    return;
 }
 
-void bellman_ford(matrice_adjacente * m, int sommet)
+void bellman_ford(matrice_adjacente * m, int ** distance, int sommet)
 {
-    int **distance = initialisation_bellmanFord(sommet, m->nombre_sommet), i, j, k;
+    initialisation_bellmanFord(sommet, distance, m->nombre_sommet);
+    int i, j, k;
     bool change = false;
     nombre_operation+=2;
     for(i  = 1; i < m->nombre_sommet; i++) // max nombre de sommet - 1 itérations
@@ -214,7 +227,6 @@ void bellman_ford(matrice_adjacente * m, int sommet)
         for(i = 0; i < m->nombre_sommet; i++)
             if(sommet != i)
                 printf("\nde %d au sommet %d : %d.\n", sommet, i, distance[i][POIDS]);
-        afficheGrapheDotFinal(m->nombre_sommet, distance, m);
     }
     else
         printf("Présence d'un circuit absorbant. Impossible de trouver un chemin minimum.");
@@ -317,25 +329,24 @@ void mettreAJourMatriceCalculTopo(int ** m, int sommet, int degre){
 }
 
 
-int ** initialisation_bellman(int sommet, int nb_sommet, int origine)
+void initialisation_bellman(int ** distance, int nb_sommet, int origine)
 {
-    int **distance = malloc(sizeof(int*) * nb_sommet), i;
+    int  i;
     for(i = 0; i < nb_sommet; i++)
     {
-        distance[i] = malloc(sizeof(int) * 2);
         distance[i][POIDS] = INT_MAX;
         distance[i][ANTECEDENT] = -1;
         nombre_operation+= 3;
     }
     distance[origine][POIDS] = 0;
     nombre_operation+= 2;
-    return distance;
+    return;
 }
 
-void bellman(matrice_adjacente * m, int * ordre_topologique, int sommet)
+void bellman(matrice_adjacente * m, int ** distance, int * ordre_topologique, int sommet)
 {
-    printf("int max = %d", INT_MAX);
-    int ** distance = initialisation_bellman(sommet, m->nombre_sommet, ordre_topologique[0]), i, j;
+    initialisation_bellman(distance, m->nombre_sommet,ordre_topologique[0]);
+    int i, j;
     nombre_operation++;
     for(i = 0; i < m->nombre_sommet; i++)
     {
@@ -358,7 +369,6 @@ void bellman(matrice_adjacente * m, int * ordre_topologique, int sommet)
     for(i = 0; i < m->nombre_sommet; i++)
         if(sommet != i)
             printf("\nde %d au sommet %d : %d.\n", sommet, i, distance[i][POIDS]);
-    afficheGrapheDotFinal(m->nombre_sommet, distance, m);
 }
 
 
